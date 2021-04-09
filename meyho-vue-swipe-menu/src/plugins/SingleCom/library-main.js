@@ -1,11 +1,11 @@
 // コンポーネントのインポート
-import component from '@/components/SingleCom.vue'; //(1)Vueのファイル名に変更
+import component from '@/components/MeyhoVueSwipeMenu.vue'; //(1)Vueのファイル名に変更
 
 // Vue.use() によって実行される install 関数を定義
 export function install(Vue) {
     if (install.installed) return;
     install.installed = true;
-    Vue.component('VueSingleCom', component); //(2)コンポーネント名を変更
+    Vue.component('MeyhoMenu', component); //(2)コンポーネント名を変更
 }
 
 // Vue.use() のためのモジュール定義を作成
