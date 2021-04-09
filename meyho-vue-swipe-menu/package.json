@@ -1,13 +1,19 @@
 {
   "name": "meyho-vue-swipe-menu",
-  "version": "1.0.1",
+  "version": "1.0.19",
   "license": "MIT",
   "author": "dema dadi",
-  "main": "dist/index.js",
+  "main": "./dist/meyho-vue-swipe-menu.common.js",
+  "unpkg": "./dist/meyho-vue-swipe-menu.umd.js",
+  "jsdelivr": "./dist/meyho-vue-swipe-menu.umd.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lib": "vue-cli-service build --target lib --name meyho-vue-swipe-menu ./src/plugins/SingleCom/library-main.js"
   },
   "dependencies": {
     "core-js": "^3.8.1",
@@ -20,8 +26,22 @@
     "@vue/cli-service": "~4.4.1",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.1.0",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vue": "^7.8.0",
     "vue-template-compiler": "^2.6.12"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
   },
   "browserslist": [
     "> 1%",
