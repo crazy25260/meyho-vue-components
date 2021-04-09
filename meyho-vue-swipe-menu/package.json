@@ -1,6 +1,6 @@
 {
   "name": "meyho-vue-swipe-menu",
-  "version": "1.0.20",
+  "version": "1.1.5",
   "license": "MIT",
   "author": "dema dadi",
   "main": "./dist/meyho-vue-swipe-menu.common.js",
@@ -13,7 +13,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lib": "vue-cli-service build --target lib --name meyho-vue-swipe-menu ./src/plugins/SingleCom/library-main.js"
+    "lib": "vue-cli-service build --target lib --name meyho-vue-swipe-menu ./src/plugins/index.js"
   },
   "dependencies": {
     "core-js": "^3.8.1",
