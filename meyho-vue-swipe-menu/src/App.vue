@@ -7,7 +7,9 @@
 <!--      <button v-for="(menuBtn, index) in nav_categories" :key="index">{{ menuBtn.name }}</button>-->
 <!--    </MeyhoSwipeNavMenu>-->
 
-    <SingleCom></SingleCom>
+<!--    <SingleCom></SingleCom>-->
+
+    <MySwipeMenu></MySwipeMenu>
   </div>
 </template>
 
@@ -16,14 +18,16 @@
 
 // import MeyhoSwipeNavMenu from "@/components/MeyhoSwipeNavMenu";
 
-import SingleCom from "@/components/SingleCom";
+// import SingleCom from "@/components/SingleCom";
+import MySwipeMenu from "@/components/MySwipeMenu";
 
 export default {
   name: 'App',
   components: {
+    MySwipeMenu,
     // MeyhoSwipeNavMenu,
     // MeyhoVueSwipeMenu,
-    SingleCom
+    // SingleCom
   },
   data() {
     let cates =  [];

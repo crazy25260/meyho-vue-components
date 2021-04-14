@@ -18,7 +18,7 @@ export default {
   props: {
     speed: {
       type: Number,
-      default: 500
+      default: 100
     },
   },
   data () {
@@ -70,15 +70,20 @@ export default {
       this.translateX = value;
     },
     _onTouchEnd () {
-      this.transitionDuration = this.speed;
-      setTimeout(()=>{
-        this.startTranslate = this.translateX;
-        document.removeEventListener('touchmove', this._onTouchMove);
-        document.removeEventListener('touchend', this._onTouchEnd);
-        document.removeEventListener('mousemove', this._onTouchMove);
-        document.removeEventListener('mouseup', this._onTouchEnd);
-        // this.$emit('touch-end', this.currentPage, new Date().getTime() - this.startTime);
-      }, this.transitionDuration);
+      this.startTranslate = this.translateX;
+      document.removeEventListener('touchmove', this._onTouchMove);
+      document.removeEventListener('touchend', this._onTouchEnd);
+      document.removeEventListener('mousemove', this._onTouchMove);
+      document.removeEventListener('mouseup', this._onTouchEnd);
+      // this._onTransitionStart();
+      // setTimeout(()=>{
+      //   this.startTranslate = this.translateX;
+      //   document.removeEventListener('touchmove', this._onTouchMove);
+      //   document.removeEventListener('touchend', this._onTouchEnd);
+      //   document.removeEventListener('mousemove', this._onTouchMove);
+      //   document.removeEventListener('mouseup', this._onTouchEnd);
+      // }, 500);
+
     },
     // 滑动惯性过度效果
     _onTransitionStart () {
@@ -86,14 +91,16 @@ export default {
       this.transitionDuration = this.speed;
     },
     _onTransitionEnd () {
+      console.log("_onTransitionEnd entered.")
+
       this.transitioning = false;
       this.transitionDuration = 0;
       this.delta = 0;
-      // if (this._isPageChanged()) {
-      //   this.$emit('change-end', this.currentPage);
-      // } else {
-      //   this.$emit('revert-end', this.currentPage);
-      // }
+      // // if (this._isPageChanged()) {
+      // //   this.$emit('change-end', this.currentPage);
+      // // } else {
+      // //   this.$emit('revert-end', this.currentPage);
+      // // }
     },
   }
 }
