@@ -1,15 +1,12 @@
 <template>
   <div>
-    <SwipeMenu class="buttons"
-               :currentPage="currentPageA"
+    <SwipeMenu :currentPage="currentPageA"
                :itemWidth="224"
                @move="onMoveA"
                @touch-end="onTouchEnd"
                @change-page="onChangePageA">
       <div class="swipe-item" v-for="(button, index) in buttonsA" :key="index">
-        <button
-            :class="{active: currentPageA===index+1, disabled: button.disabled}"
-            @click="onButtonClickA(index+1)">
+        <button @click="onButtonClickA(index+1)">
           {{button.name}}
         </button>
       </div>

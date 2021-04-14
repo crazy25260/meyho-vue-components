@@ -1,14 +1,8 @@
 {
   "name": "meyho-vue-swipe-menu",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "license": "MIT",
   "author": "dema dadi",
-  "main": "./dist/meyho-vue-swipe-menu.common.js",
-  "unpkg": "./dist/meyho-vue-swipe-menu.umd.js",
-  "jsdelivr": "./dist/meyho-vue-swipe-menu.umd.js",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -17,8 +11,7 @@
   },
   "dependencies": {
     "core-js": "^3.8.1",
-    "vue": "^2.6.12",
-    "vue-swipe-menu": "^0.1.11"
+    "vue": "^2.6.12"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.1",

@@ -1,15 +1,39 @@
 <template>
   <div id="app">
-    <MeyhoVueSwipeMenu></MeyhoVueSwipeMenu>
+<!--    <MeyhoVueSwipeMenu></MeyhoVueSwipeMenu>-->
+
+<!--    新的 <br/>-->
+<!--    <MeyhoSwipeNavMenu class="buttons" :center="false">-->
+<!--      <button v-for="(menuBtn, index) in nav_categories" :key="index">{{ menuBtn.name }}</button>-->
+<!--    </MeyhoSwipeNavMenu>-->
+
+    <SingleCom></SingleCom>
   </div>
 </template>
 
 <script>
-import MeyhoVueSwipeMenu from "@/components/MeyhoVueSwipeMenu";
+// import MeyhoVueSwipeMenu from "@/components/MeyhoVueSwipeMenu";
+
+// import MeyhoSwipeNavMenu from "@/components/MeyhoSwipeNavMenu";
+
+import SingleCom from "@/components/SingleCom";
+
 export default {
   name: 'App',
   components: {
-    MeyhoVueSwipeMenu
+    // MeyhoSwipeNavMenu,
+    // MeyhoVueSwipeMenu,
+    SingleCom
+  },
+  data() {
+    let cates =  [];
+    for (let i=0; i<20; i++) {
+      let cate = {id: i, name: "类别" + i, path: "/demo/path", path_name: "demo_path", pos: i};
+      cates.push(cate);
+    }
+    return {
+      nav_categories: cates
+    }
   }
 }
 </script>
@@ -22,5 +46,21 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.buttons {
+  /*width: 100%;*/
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.buttons button {
+  width: 10rem;
+  margin: .5rem 2rem;
+  height: 40px;
+  border-radius: .5rem;
+  color: rgb(128, 127, 128);
+  background-color: #f0f0f0;
+  min-width: 4rem;
 }
 </style>
