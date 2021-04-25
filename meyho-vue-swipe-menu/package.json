@@ -11,12 +11,17 @@
   },
   "dependencies": {
     "core-js": "^3.8.1",
-    "vue": "^2.6.12"
+    "sass": "^1.32.11",
+    "sass-loader": "^9.0.2",
+    "vue": "^2.6.12",
+    "vue-material": "^1.0.0-beta-15"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.1",
     "@vue/cli-plugin-eslint": "~4.4.1",
     "@vue/cli-service": "~4.4.1",
+    "@vue/eslint-config-prettier": "latest",
+    "eslint-plugin-prettier": "latest",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.1.0",
     "eslint-plugin-vue": "^7.8.0",

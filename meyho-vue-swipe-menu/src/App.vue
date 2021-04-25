@@ -8,7 +8,7 @@
 <!--    </MeyhoSwipeNavMenu>-->
 
 <!--    <SingleCom></SingleCom>-->
-
+    <SwipeNavMenu :nav_categories="nav_categories"></SwipeNavMenu>
     <MySwipeMenu></MySwipeMenu>
   </div>
 </template>
@@ -20,10 +20,12 @@
 
 // import SingleCom from "@/components/SingleCom";
 import MySwipeMenu from "@/components/MySwipeMenu";
+import SwipeNavMenu from "./components/SwipeNavMenu";
 
 export default {
   name: 'App',
   components: {
+    SwipeNavMenu,
     MySwipeMenu,
     // MeyhoSwipeNavMenu,
     // MeyhoVueSwipeMenu,
