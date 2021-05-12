@@ -1,14 +1,16 @@
 <template>
   <div id="app">
-<!--    <MeyhoVueSwipeMenu></MeyhoVueSwipeMenu>-->
+    <!--    <MeyhoVueSwipeMenu></MeyhoVueSwipeMenu>-->
 
-<!--    新的 <br/>-->
-<!--    <MeyhoSwipeNavMenu class="buttons" :center="false">-->
-<!--      <button v-for="(menuBtn, index) in nav_categories" :key="index">{{ menuBtn.name }}</button>-->
-<!--    </MeyhoSwipeNavMenu>-->
+    <!--    新的 <br/>-->
+    <!--    <MeyhoSwipeNavMenu class="buttons" :center="false">-->
+    <!--      <button v-for="(menuBtn, index) in nav_categories" :key="index">{{ menuBtn.name }}</button>-->
+    <!--    </MeyhoSwipeNavMenu>-->
 
-<!--    <SingleCom></SingleCom>-->
-    <SwipeNavMenu :nav_categories="nav_categories"></SwipeNavMenu>
+    <!--    <SingleCom></SingleCom>-->
+    <SwipeNavMenu :nav_categories="nav_categories">
+
+    </SwipeNavMenu>
     <MySwipeMenu></MySwipeMenu>
   </div>
 </template>
@@ -23,25 +25,31 @@ import MySwipeMenu from "@/components/MySwipeMenu";
 import SwipeNavMenu from "./components/SwipeNavMenu";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     SwipeNavMenu,
-    MySwipeMenu,
+    MySwipeMenu
     // MeyhoSwipeNavMenu,
     // MeyhoVueSwipeMenu,
     // SingleCom
   },
   data() {
-    let cates =  [];
-    for (let i=0; i<20; i++) {
-      let cate = {id: i, name: "类别" + i, path: "/demo/path", path_name: "demo_path", pos: i};
+    let cates = [];
+    for (let i = 0; i < 20; i++) {
+      let cate = {
+        id: i,
+        name: "类别" + i,
+        path: "/demo/path",
+        path_name: "demo_path",
+        pos: i
+      };
       cates.push(cate);
     }
     return {
       nav_categories: cates
-    }
+    };
   }
-}
+};
 </script>
 
 <style>
@@ -62,9 +70,9 @@ export default {
 
 .buttons button {
   width: 10rem;
-  margin: .5rem 2rem;
+  margin: 0.5rem 2rem;
   height: 40px;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   color: rgb(128, 127, 128);
   background-color: #f0f0f0;
   min-width: 4rem;
