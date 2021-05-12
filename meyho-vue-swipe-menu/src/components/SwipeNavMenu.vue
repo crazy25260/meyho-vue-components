@@ -46,7 +46,10 @@ export default {
       startTime: 0, // 惯性滑动范围内的 startTime
       momentumStartX: 0, // 惯性滑动范围内的 startX
       momentumTimeThreshold: 300, // 惯性滑动的启动 时间阈值
-      isStarted: false // start锁
+      momentumXThreshold: 15, // 惯性滑动的启动 距离阈值
+      isStarted: false, // start锁
+      menuOverflow: true, // 菜单是否处于溢出状态，即是否菜单超出可是界面宽度。 如没有溢出，左滑到界限后，惯性距离设为0.
+      momentumMoving: false // 是否处于惯性滑动中，如果处于惯性滑动中，那么当按下鼠标或者手指触摸的时候，要先停止惯性滑动。
     };
   },
   computed: {
@@ -64,9 +67,17 @@ export default {
       this.scroller = this.$refs.scroller;
       const { width: wrapperWidth } = this.wrapper.getBoundingClientRect();
       const { width: scrollWidth } = this.scroller.getBoundingClientRect();
+
+      // 先看菜单和界面可视区域谁更宽。即菜单栏是否处于overflow（溢出）的状态
+      let menuBarWidth =
+        this.$refs.menuItem[0].clientWidth * this.nav_categories.length;
+      let visibalWidth = this.$refs.wrapper.clientWidth;
+
+      this.menuOverflow = menuBarWidth > visibalWidth;
       this.wrapperWidth =
-        this.$refs.menuItem[0].clientWidth * this.nav_categories.length -
-        this.$refs.wrapper.clientWidth;
+        menuBarWidth > visibalWidth
+          ? menuBarWidth - visibalWidth
+          : menuBarWidth;
       this.minX = wrapperWidth - scrollWidth;
       this.maxX = this.wrapperWidth;
       console.log(
@@ -81,8 +92,11 @@ export default {
     onStart(e) {
       const point = e.touches ? e.touches[0] : e;
       this.isStarted = true;
+      // 如果正在惯性滑动，那么需要先停止惯性滑动。
+      if (this.momentumMoving) {
+        this.stop();
+      }
       this.duration = 0;
-      // this.stop();
       this.pointX = point.pageX;
       this.momentumStartX = this.startX = this.offsetX;
       this.startTime = new Date().getTime();
@@ -117,25 +131,89 @@ export default {
       if (!this.isStarted) return;
       this.isStarted = false;
       if (this.isNeedReset()) return;
-      // const absDeltaY = Math.abs(this.offsetY - this.momentumStartY);
-      // const duration = new Date().getTime() - this.startTime;
-      // // 启动惯性滑动
-      // if (
-      //   duration < this.momentumTimeThreshold &&
-      //   absDeltaY > this.momentumYThreshold
-      // ) {
-      //   const momentum = this.momentum(
-      //     this.offsetY,
-      //     this.momentumStartY,
-      //     duration
-      //   );
-      //   this.offsetY = Math.round(momentum.destination);
-      //   this.duration = momentum.duration;
-      //   this.bezier = momentum.bezier;
-      // }
+      const absDeltaX = Math.abs(this.offsetX - this.momentumStartX);
+      const duration = new Date().getTime() - this.startTime;
+      // 启动惯性滑动
+      if (
+        duration < this.momentumTimeThreshold &&
+        absDeltaX > this.momentumXThreshold
+      ) {
+        const momentum = this.momentum(
+          this.offsetX,
+          this.momentumStartX,
+          duration
+        );
+        this.offsetX = Math.round(momentum.destination);
+        this.duration = momentum.duration;
+        this.bezier = momentum.bezier;
+      }
     },
     onTransitionEnd() {
       this.isNeedReset();
+      this.momentumMoving = false;
+    },
+    momentum(current, start, duration) {
+      const durationMap = {
+        noBounce: 2500,
+        weekBounce: 800,
+        strongBounce: 400
+      };
+      const bezierMap = {
+        noBounce: "cubic-bezier(.17, .89, .45, 1)",
+        weekBounce: "cubic-bezier(.25, .46, .45, .94)",
+        strongBounce: "cubic-bezier(.25, .46, .45, .94)"
+      };
+
+      this.momentumMoving = true;
+      let type = "noBounce";
+      // 惯性滑动加速度
+      const deceleration = 0.003;
+      // 回弹阻力
+      const bounceRate = 10;
+      // 强弱回弹的分割值
+      const bounceThreshold = 300;
+      // 回弹的最大限度
+      const maxOverflowX = this.wrapperWidth / 6;
+      let overflowX;
+
+      const distance = current - start;
+      const speed = (2 * Math.abs(distance)) / duration;
+      let destination =
+        current + (speed / deceleration) * (distance < 0 ? -1 : 1);
+
+      console.log("AAAAAAAAAA:" + maxOverflowX);
+      console.log("0000000000:destination:" + destination);
+
+      // 菜单右滑超出界限
+      if (destination > this.minX) {
+        overflowX = destination - this.minX;
+        type = overflowX > bounceThreshold ? "strongBounce" : "weekBounce";
+        destination = Math.max(
+          maxOverflowX - this.minX,
+          overflowX / bounceRate - this.minX
+        );
+        console.log("1111111111:" + destination);
+      }
+      // 菜单左滑超出界限
+      else if (0 - destination > this.maxX) {
+        overflowX = 0 - destination - this.maxX;
+        type = overflowX > bounceThreshold ? "strongBounce" : "weekBounce";
+        destination = Math.min(
+          0 - (this.maxX + maxOverflowX),
+          0 - (this.maxX + maxOverflowX / bounceRate)
+        );
+
+        if (!this.menuOverflow) {
+          destination = 0;
+        }
+        console.log("2222222222:" + destination);
+      }
+
+      return {
+        destination,
+        duration: durationMap[type],
+        bezier: bezierMap[type]
+      };
     },
     // 超出边界时需要重置位置
     isNeedReset() {
@@ -161,7 +239,14 @@ export default {
       const matrix = window
         .getComputedStyle(this.scroller)
         .getPropertyValue("transform");
-      this.offsetX = Math.round(+matrix.split(")")[0].split(", ")[5]);
+      this.offsetX = Math.round(+matrix.split(")")[0].split(", ")[4]);
+      console.log(
+        "3333333333:matrix:" +
+          JSON.stringify(matrix) +
+          ", this.offsetX:" +
+          this.offsetX
+      );
+      this.momentumMoving = false;
     }
   }
 };
