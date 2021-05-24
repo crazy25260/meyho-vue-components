@@ -15,6 +15,9 @@
     <div class="wrapper" ref="scroller" :style="scrollerStyle">
       <div
         class="swipe-item"
+        :class="{ hover: hover }"
+        @mouseover="hover = true"
+        @mouseleave="hover = false"
         ref="menuItem"
         v-for="(item, index) in nav_categories"
         :key="index"
@@ -49,7 +52,8 @@ export default {
       momentumXThreshold: 15, // 惯性滑动的启动 距离阈值
       isStarted: false, // start锁
       menuOverflow: true, // 菜单是否处于溢出状态，即是否菜单超出可是界面宽度。 如没有溢出，左滑到界限后，惯性距离设为0.
-      momentumMoving: false // 是否处于惯性滑动中，如果处于惯性滑动中，那么当按下鼠标或者手指触摸的时候，要先停止惯性滑动。
+      momentumMoving: false, // 是否处于惯性滑动中，如果处于惯性滑动中，那么当按下鼠标或者手指触摸的时候，要先停止惯性滑动。
+      hover: false
     };
   },
   computed: {
@@ -273,7 +277,11 @@ export default {
   .swipe-item {
     //margin-left: 1rem;
     min-width: 4rem;
-    border: 1px solid red;
+    //border: 1px solid red;
   }
+}
+
+.hover {
+  cursor: pointer;
 }
 </style>
