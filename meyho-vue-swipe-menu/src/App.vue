@@ -8,9 +8,13 @@
     <!--    </MeyhoSwipeNavMenu>-->
 
     <!--    <SingleCom></SingleCom>-->
-    <SwipeNavMenu :nav_categories="nav_categories">
+    <SwipeNavMenu
+      :nav_categories="nav_categories"
+      :active_style="active_style"
+      @nav-click="onHeaderInnerNavClick"
+    >
     </SwipeNavMenu>
-<!--    <MySwipeMenu></MySwipeMenu>-->
+    <!--    <MySwipeMenu></MySwipeMenu>-->
   </div>
 </template>
 
@@ -45,8 +49,16 @@ export default {
       cates.push(cate);
     }
     return {
-      nav_categories: cates
+      nav_categories: cates,
+      active_style: {
+        color: "red"
+      }
     };
+  },
+  methods: {
+    onHeaderInnerNavClick(index, menuItem) {
+      console.log("index:" + index + ", menuItem:" + JSON.stringify(menuItem));
+    }
   }
 };
 </script>

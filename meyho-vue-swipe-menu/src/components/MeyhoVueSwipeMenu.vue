@@ -1,13 +1,15 @@
 <template>
   <div>
-    <SwipeMenu :currentPage="currentPageA"
-               :itemWidth="224"
-               @move="onMoveA"
-               @touch-end="onTouchEnd"
-               @change-page="onChangePageA">
+    <SwipeMenu
+      :currentPage="currentPageA"
+      :itemWidth="224"
+      @move="onMoveA"
+      @touch-end="onTouchEnd"
+      @change-page="onChangePageA"
+    >
       <div class="swipe-item" v-for="(button, index) in buttonsA" :key="index">
-        <button @click="onButtonClickA(index+1)">
-          {{button.name}}
+        <button @click="onButtonClickA(index + 1)">
+          {{ button.name }}
         </button>
       </div>
     </SwipeMenu>
@@ -15,75 +17,82 @@
 </template>
 
 <script>
-import SwipeMenu from 'vue-swipe-menu';
-import 'vue-swipe-menu/dist/vue-swipe-menu.css'
+import SwipeMenu from "vue-swipe-menu";
+import "vue-swipe-menu/dist/vue-swipe-menu.css";
 export default {
   name: "MeyhoVueSwipeMenu",
   components: {
-    SwipeMenu,
+    SwipeMenu
   },
   data() {
     return {
       touchTime: 0,
       currentPageA: 1,
       buttonsA: [
-        {name: 'メニュー１'},
-        {name: 'メニュー２'},
-        {name: 'メニュー３'},
-        {name: 'メニュー４'},
+        { name: "メニュー１" },
+        { name: "メニュー２" },
+        { name: "メニュー３" },
+        { name: "メニュー４" }
       ],
       currentPageB: 1,
-      buttonsB: [],
+      buttonsB: []
     };
   },
-  created () {
+  created() {
     let count = 0;
     while (count < 50) {
       this.buttonsB.push({
-        color: '#' +
-            ('00' + Math.floor(Math.random()*Math.floor(255)).toString(16)).slice(-2) +
-            ('00' + Math.floor(Math.random()*Math.floor(255)).toString(16)).slice(-2) +
-            ('00' + Math.floor(Math.random()*Math.floor(255)).toString(16)).slice(-2)
+        color:
+          "#" +
+          (
+            "00" + Math.floor(Math.random() * Math.floor(255)).toString(16)
+          ).slice(-2) +
+          (
+            "00" + Math.floor(Math.random() * Math.floor(255)).toString(16)
+          ).slice(-2) +
+          (
+            "00" + Math.floor(Math.random() * Math.floor(255)).toString(16)
+          ).slice(-2)
       });
       count++;
     }
   },
   methods: {
-    onButtonClickA: function (page) {
+    onButtonClickA: function(page) {
       if (this.touchTime < 300) {
         this.onChangePageA(page);
       }
     },
-    onChangePageA: function (page) {
+    onChangePageA: function(page) {
       this.currentPageA = page;
     },
-    onMoveA: function (page) {
+    onMoveA: function(page) {
       if (page <= 0) page = 1;
       if (page > this.buttonsB.length) page = this.buttonsA.length;
       if (page !== this.currentPageA) {
         this.onChangePageA(page);
       }
     },
-    onButtonClickB: function (page) {
+    onButtonClickB: function(page) {
       if (this.touchTime < 300) {
         this.onChangePageB(page);
       }
     },
-    onChangePageB: function (page) {
+    onChangePageB: function(page) {
       this.currentPageB = page;
     },
-    onMoveB: function (page) {
+    onMoveB: function(page) {
       if (page <= 0) page = 1;
       if (page > this.buttonsB.length) page = this.buttonsB.length;
       if (page !== this.currentPageB) {
         this.onChangePageB(page);
       }
     },
-    onTouchEnd: function (page, touchTime) {
+    onTouchEnd: function(page, touchTime) {
       this.touchTime = touchTime;
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -98,13 +107,12 @@ export default {
   /*width: 100%;*/
   background-color: rgba(0, 0, 0, 0.5);
   overflow: hidden;
-
 }
 .buttons button {
   width: 10rem;
-  margin: .5rem 2rem;
+  margin: 0.5rem 2rem;
   height: 40px;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   color: rgb(128, 127, 128);
   background-color: #f0f0f0;
 }

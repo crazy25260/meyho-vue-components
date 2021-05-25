@@ -15,12 +15,14 @@
     <div class="wrapper" ref="scroller" :style="scrollerStyle">
       <div
         class="swipe-item"
-        :class="{ hover: hover }"
+        :class="{ hover: hover, activeClass: activeIndex === index }"
+        :style="activeStyle(active_style, activeIndex === index)"
         @mouseover="hover = true"
         @mouseleave="hover = false"
         ref="menuItem"
         v-for="(item, index) in nav_categories"
         :key="index"
+        @click="onClick(index, item)"
       >
         {{ item.name }}
       </div>
@@ -32,7 +34,15 @@
 export default {
   name: "SwipeNavMenu",
   props: {
-    nav_categories: Array
+    nav_categories: Array,
+    active_style: {
+      type: Object,
+      default: function() {
+        return {
+          color: "#00bcd4"
+        };
+      }
+    }
   },
   data() {
     return {
@@ -53,7 +63,8 @@ export default {
       isStarted: false, // start锁
       menuOverflow: true, // 菜单是否处于溢出状态，即是否菜单超出可是界面宽度。 如没有溢出，左滑到界限后，惯性距离设为0.
       momentumMoving: false, // 是否处于惯性滑动中，如果处于惯性滑动中，那么当按下鼠标或者手指触摸的时候，要先停止惯性滑动。
-      hover: false
+      hover: false,
+      activeIndex: 0
     };
   },
   computed: {
@@ -251,6 +262,31 @@ export default {
           this.offsetX
       );
       this.momentumMoving = false;
+    },
+    // 正常菜单相关内容，与滑动与惯性无关的内容分界线 =================== 以下均是。
+    handleSelect(index, menuItem) {
+      // 此处的key是导航条目的当前选中的索引号。
+      this.$emit("nav-click", index, menuItem);
+    },
+    onClick(index, item) {
+      if (this.activeIndex === index) {
+        return;
+      }
+
+      this.activeIndex = index;
+      this.handleSelect(index, item);
+    },
+    activeStyle(active_style, show) {
+      if (!show) {
+        return {};
+      }
+
+      return {
+        color: active_style.color
+      };
+    },
+    getSelectedMenuItem() {
+      return this.nav_categories[this.activeIndex];
     }
   }
 };
@@ -283,5 +319,10 @@ export default {
 
 .hover {
   cursor: pointer;
+}
+
+.active {
+  transform: scale(1.1);
+  color: #00bcd4;
 }
 </style>
