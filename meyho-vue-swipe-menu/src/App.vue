@@ -38,16 +38,16 @@ export default {
   },
   data() {
     let cates = [];
-    for (let i = 0; i < 20; i++) {
-      let cate = {
-        id: i,
-        name: "类别" + i,
-        path: "/demo/path",
-        path_name: "demo_path",
-        pos: i
-      };
-      cates.push(cate);
-    }
+    // for (let i = 0; i < 20; i++) {
+    //   let cate = {
+    //     id: i,
+    //     name: "类别" + i,
+    //     path: "/demo/path",
+    //     path_name: "demo_path",
+    //     pos: i
+    //   };
+    //   cates.push(cate);
+    // }
     return {
       nav_categories: cates,
       active_style: {
@@ -59,6 +59,22 @@ export default {
     onHeaderInnerNavClick(index, menuItem) {
       console.log("index:" + index + ", menuItem:" + JSON.stringify(menuItem));
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      let cates = [];
+      for (let i = 0; i < 20; i++) {
+        let cate = {
+          id: i,
+          name: "类别" + i,
+          path: "/demo/path",
+          path_name: "demo_path",
+          pos: i
+        };
+        cates.push(cate);
+      }
+      this.nav_categories = cates;
+    }, 5000);
   }
 };
 </script>

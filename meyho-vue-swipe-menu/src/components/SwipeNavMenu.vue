@@ -76,32 +76,18 @@ export default {
       };
     }
   },
+  watch: {
+    // 外部填充了数据才能真正初始化菜单。
+    nav_categories: function(newData, oldData) {
+      if (newData && newData.length > 0 && (!oldData || oldData.length <= 0)) {
+        this.initial();
+      }
+    }
+  },
   mounted() {
-    this.$nextTick(() => {
-      this.wrapper = this.$refs.wrapper;
-      this.scroller = this.$refs.scroller;
-      const { width: wrapperWidth } = this.wrapper.getBoundingClientRect();
-      const { width: scrollWidth } = this.scroller.getBoundingClientRect();
-
-      // 先看菜单和界面可视区域谁更宽。即菜单栏是否处于overflow（溢出）的状态
-      let menuBarWidth =
-        this.$refs.menuItem[0].clientWidth * this.nav_categories.length;
-      let visibalWidth = this.$refs.wrapper.clientWidth;
-
-      this.menuOverflow = menuBarWidth > visibalWidth;
-      this.wrapperWidth =
-        menuBarWidth > visibalWidth
-          ? menuBarWidth - visibalWidth
-          : menuBarWidth;
-      this.minX = wrapperWidth - scrollWidth;
-      this.maxX = this.wrapperWidth;
-      console.log(
-        "mounted()->minX:" +
-          this.minX +
-          ", mounted()->wrapperWidth:" +
-          this.wrapperWidth
-      );
-    });
+    if (this.nav_categories && this.nav_categories.length > 0) {
+      this.initial();
+    }
   },
   methods: {
     onStart(e) {
@@ -124,14 +110,6 @@ export default {
       let offsetX = Math.round(this.startX + deltaX);
       // 超出边界时增加阻力
       if (offsetX > this.minX || 0 - offsetX > this.maxX) {
-        console.log(
-          "超出边界时增加阻力 offsetX：" +
-            offsetX +
-            ", maxX:" +
-            this.maxX +
-            ", minX:" +
-            this.minX
-        );
         offsetX = Math.round(this.startX + deltaX / 3);
       }
       this.offsetX = offsetX;
@@ -196,9 +174,6 @@ export default {
       let destination =
         current + (speed / deceleration) * (distance < 0 ? -1 : 1);
 
-      console.log("AAAAAAAAAA:" + maxOverflowX);
-      console.log("0000000000:destination:" + destination);
-
       // 菜单右滑超出界限
       if (destination > this.minX) {
         overflowX = destination - this.minX;
@@ -207,7 +182,6 @@ export default {
           maxOverflowX - this.minX,
           overflowX / bounceRate - this.minX
         );
-        console.log("1111111111:" + destination);
       }
       // 菜单左滑超出界限
       else if (0 - destination > this.maxX) {
@@ -221,7 +195,6 @@ export default {
         if (!this.menuOverflow) {
           destination = 0;
         }
-        console.log("2222222222:" + destination);
       }
 
       return {
@@ -242,11 +215,9 @@ export default {
         this.offsetX = offsetX;
         this.duration = 500;
         this.bezier = "cubic-bezier(.165, .84, .44, 1)";
-        console.log("超出边界，需要重置。this.offsetX:" + this.offsetX);
         return true;
       }
 
-      console.log("没有超出边界，不需要重置。this.offsetX:" + this.offsetX);
       return false;
     },
     stop() {
@@ -255,12 +226,6 @@ export default {
         .getComputedStyle(this.scroller)
         .getPropertyValue("transform");
       this.offsetX = Math.round(+matrix.split(")")[0].split(", ")[4]);
-      console.log(
-        "3333333333:matrix:" +
-          JSON.stringify(matrix) +
-          ", this.offsetX:" +
-          this.offsetX
-      );
       this.momentumMoving = false;
     },
     // 正常菜单相关内容，与滑动与惯性无关的内容分界线 =================== 以下均是。
@@ -284,6 +249,33 @@ export default {
       return {
         color: active_style.color
       };
+    },
+    initial() {
+      this.$nextTick(() => {
+        this.wrapper = this.$refs.wrapper;
+        this.scroller = this.$refs.scroller;
+        const { width: wrapperWidth } = this.wrapper.getBoundingClientRect();
+        const { width: scrollWidth } = this.scroller.getBoundingClientRect();
+
+        // 先看菜单和界面可视区域谁更宽。即菜单栏是否处于overflow（溢出）的状态
+        let menuBarWidth =
+          this.$refs.menuItem[0].clientWidth * this.nav_categories.length;
+        let visibalWidth = this.$refs.wrapper.clientWidth;
+
+        this.menuOverflow = menuBarWidth > visibalWidth;
+        this.wrapperWidth =
+          menuBarWidth > visibalWidth
+            ? menuBarWidth - visibalWidth
+            : menuBarWidth;
+        this.minX = wrapperWidth - scrollWidth;
+        this.maxX = this.wrapperWidth;
+        // console.log(
+        //   "initial()->minX:" +
+        //     this.minX +
+        //     ", initial()->wrapperWidth:" +
+        //     this.wrapperWidth
+        // );
+      });
     },
     getSelectedMenuItem() {
       return this.nav_categories[this.activeIndex];
@@ -311,9 +303,7 @@ export default {
   box-sizing: content-box;
 
   .swipe-item {
-    //margin-left: 1rem;
     min-width: 4rem;
-    //border: 1px solid red;
   }
 }
 
@@ -321,8 +311,10 @@ export default {
   cursor: pointer;
 }
 
-.active {
+.activeClass {
   transform: scale(1.1);
   color: #00bcd4;
+  font-weight: 500;
+  padding-bottom: 0.2rem;
 }
 </style>
