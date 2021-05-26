@@ -1,9 +1,12 @@
 {
   "name": "meyho-vue-swipe-menu",
-  "version": "1.2.13",
+  "version": "1.2.23",
   "license": "MIT",
   "author": "dema dadi",
-  "main": "dist/meyho-vue-swipe-menu.common.js",
+  "main": "dist/meyho-vue-swipe-menu.umd.min.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
