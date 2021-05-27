@@ -23,6 +23,8 @@
         v-for="(item, index) in nav_categories"
         :key="index"
         @click="onClick(index, item)"
+        @touchstart="itemTouchStart"
+        @touchend="itemTouchEnd(index, item)"
       >
         {{ item.name }}
       </div>
@@ -64,7 +66,10 @@ export default {
       menuOverflow: true, // 菜单是否处于溢出状态，即是否菜单超出可是界面宽度。 如没有溢出，左滑到界限后，惯性距离设为0.
       momentumMoving: false, // 是否处于惯性滑动中，如果处于惯性滑动中，那么当按下鼠标或者手指触摸的时候，要先停止惯性滑动。
       hover: false,
-      activeIndex: 0
+      activeIndex: 0,
+      touchClickThreshold: 150, // 触摸点击的初始判断时间阈值
+      touchStartTime: 0, // 触摸点击的初始判断时间点 touchStartTime
+      touchStartX: 0 // 触摸点击的初始坐标 touchStartX
     };
   },
   computed: {
@@ -126,7 +131,7 @@ export default {
       if (this.isNeedReset()) return;
       const absDeltaX = Math.abs(this.offsetX - this.momentumStartX);
       const duration = new Date().getTime() - this.startTime;
-      // 启动惯性滑动
+      // 启动惯性滑动 (时间足够短，距离足够长)
       if (
         duration < this.momentumTimeThreshold &&
         absDeltaX > this.momentumXThreshold
@@ -228,6 +233,24 @@ export default {
       this.offsetX = Math.round(+matrix.split(")")[0].split(", ")[4]);
       this.momentumMoving = false;
     },
+    itemTouchStart() {
+      this.touchStartTime = new Date().getTime();
+      this.touchStartX = this.offsetX;
+    },
+    itemTouchEnd(index, item) {
+      // 如果处于滑动中，忽略。
+      if (!this.isStarted) return;
+
+      const duration = new Date().getTime() - this.touchStartTime;
+      const absDeltaX = Math.abs(this.offsetX - this.touchStartX);
+      // 触摸点击的时间临界值判定
+      if (duration > this.touchClickThreshold || absDeltaX > 5 ) {
+        return;
+      }
+
+      // 否则就当做触摸点击处理。
+      this.onClick(index, item);
+    },
     // 正常菜单相关内容，与滑动与惯性无关的内容分界线 =================== 以下均是。
     handleSelect(index, menuItem) {
       // 此处的key是导航条目的当前选中的索引号。
@@ -303,7 +326,7 @@ export default {
   box-sizing: content-box;
 
   .swipe-item {
-    min-width: 4rem;
+    min-width: 3.6rem;
   }
 }
 

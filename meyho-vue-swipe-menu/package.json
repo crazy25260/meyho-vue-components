@@ -1,6 +1,6 @@
 {
   "name": "meyho-vue-swipe-menu",
-  "version": "1.3.4",
+  "version": "1.3.6",
   "license": "MIT",
   "author": "dema dadi",
   "main": "dist/meyho-vue-swipe-menu.umd.min.js",

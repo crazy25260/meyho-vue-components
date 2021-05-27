@@ -74,7 +74,7 @@ export default {
         cates.push(cate);
       }
       this.nav_categories = cates;
-    }, 5000);
+    }, 2000);
   }
 };
 </script>
